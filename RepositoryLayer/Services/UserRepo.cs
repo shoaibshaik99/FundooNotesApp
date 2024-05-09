@@ -26,9 +26,9 @@ namespace RepositoryLayer.Services
             this._config = config;
         }
 
-        public UserEntity UserRegistration (RegisterModel model)
+        public UserEntity UserRegistration(RegisterModel model)
         {
-            if (CheckEmailExists(model.Email))
+            if (VerifyEmailExists(model.Email))
             {
                 return null;
             }
@@ -53,7 +53,7 @@ namespace RepositoryLayer.Services
             {
                 byte[] encData_byte = System.Text.Encoding.UTF8.GetBytes(password);
                 return Convert.ToBase64String(encData_byte);
-                
+
             }
             catch (Exception ex)
             {
@@ -71,8 +71,9 @@ namespace RepositoryLayer.Services
         public string Login(UserLoginModel userLoginModel)
         {
 
-            //string encodedPassword= EncodePasswordToBase64(userLoginModel.Password);
-            var result = context.Users.FirstOrDefault(u => u.Email == userLoginModel.Email && DecodeFromBase64(u.Password) == userLoginModel.Password);
+            string encodedPassword = EncodePasswordToBase64(userLoginModel.Password);
+            var result = context.Users.FirstOrDefault(u => u.Email == userLoginModel.Email && u.Password == EncodePasswordToBase64(userLoginModel.Password));
+            //var result = context.Users.FirstOrDefault(u => u.Email == userLoginModel.Email && DecodeFromBase64(u.Password) == userLoginModel.Password);
             if (result != null)
             {
                 var token = GenerateToken(result.Email, result.UserId);
@@ -81,9 +82,9 @@ namespace RepositoryLayer.Services
             return null;
         }
 
-        public bool CheckEmailExists(string email)
+        public bool VerifyEmailExists(string email)
         {
-            var user = context.Users.FirstOrDefault(u=> (u.Email == email));
+            var user = context.Users.FirstOrDefault(u => (u.Email == email));
             if (user != null)
             {
                 return true;
@@ -116,5 +117,60 @@ namespace RepositoryLayer.Services
 
         }
 
+        public ForgotPasswordModel ForgotPassword(string email)
+        {
+            try
+            {
+                var user = context.Users.FirstOrDefault(u => u.Email == email);
+                ForgotPasswordModel forgotPasswordModel = new ForgotPasswordModel();
+                if (user != null)
+                {
+                    forgotPasswordModel.Email = email;
+                    return forgotPasswordModel;
+                }
+                else
+                {
+                    return new ForgotPasswordModel();
+                }
+            }
+            catch
+            {
+                return null;
+            }
+
+
+        }
+
+        public ResetPasswordModel ResetPassword(ResetPasswordModel resetPasswordModel)
+        {
+            try
+            {
+                UserEntity userEntity = GetUsrByEmail(resetPasswordModel.Email);
+                if (userEntity != null && resetPasswordModel.Password == resetPasswordModel.ConfirmPassword)
+                {
+                    userEntity.Password = EncodePasswordToBase64(resetPasswordModel.Password);
+                    userEntity.ChangedAt = DateTime.Now;
+                    context.SaveChanges();
+                }
+                return resetPasswordModel;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public UserEntity GetUsrByEmail(string email)
+        {
+            try
+            {
+                UserEntity userEntity = context.Users.FirstOrDefault(u => u.Email == email);
+                return userEntity;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }

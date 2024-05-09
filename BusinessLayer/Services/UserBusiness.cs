@@ -29,7 +29,23 @@ namespace BusinessLayer.Services
 
         public bool CheckEmailExists(string email)
         {
-            return userRepo.CheckEmailExists(email);
+            return userRepo.VerifyEmailExists(email);
         }
+
+        public ForgotPasswordModel ForgotPassword(string email)
+        {
+            return userRepo.ForgotPassword(email);
+        }
+
+        public ResetPasswordModel ResetPassword(ResetPasswordModel resetPasswordModel)
+        {
+            return userRepo.ResetPassword(resetPasswordModel);
+        }
+
+        public UserEntity GetUsrByEmail(string email)
+        {
+            return userRepo.GetUsrByEmail(email);
+        }
+
     }
 }

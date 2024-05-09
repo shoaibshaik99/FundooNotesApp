@@ -48,5 +48,32 @@ namespace FundooNotesApp.Controllers
             }
         }
 
+        [HttpGet("ForgotPassword")]
+        public IActionResult ForgotPassword(string email)
+        {
+            var result = usersBusiness.ForgotPassword(email);
+            if( result != null)
+            {
+                return Ok(new ResponseModel<ForgotPasswordModel> {IsSuccess = true, Message = "User Exits", Data = result });
+            }
+            else
+            {
+                return BadRequest(new ResponseModel<ForgotPasswordModel> { IsSuccess = false, Message = "User Not Found!", Data = result });
+            }
+        }
+
+        [HttpGet("ResetPassword")]
+        public IActionResult ResetPassword(ResetPasswordModel resetPasswordModel)
+        {
+            var result = usersBusiness.ResetPassword(resetPasswordModel);
+            if (result != null)
+            {
+                return Ok(new ResponseModel<ResetPasswordModel> { IsSuccess = true, Message = "Password Updated Successfully", Data = result });
+            }
+            else
+            {
+                return BadRequest(new ResponseModel<ResetPasswordModel> { IsSuccess = false, Message = "Password Updated Successfully", Data = result });
+            }
+        }
     }
 }

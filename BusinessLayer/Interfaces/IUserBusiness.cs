@@ -13,5 +13,11 @@ namespace BusinessLayer.Interfaces
         public string Login(UserLoginModel userLoginModel);
 
         public bool CheckEmailExists(string email);
+
+        public ForgotPasswordModel ForgotPassword(string email);
+
+        public ResetPasswordModel ResetPassword(ResetPasswordModel resetPasswordModel);
+
+        public UserEntity GetUsrByEmail(string email);
     }
 }

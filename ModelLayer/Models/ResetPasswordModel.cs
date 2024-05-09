@@ -4,9 +4,10 @@ using System.Text;
 
 namespace ModelLayer.Models
 {
-    public class UserLoginModel
+    public class ResetPasswordModel
     {
         public string Email { get; set; }
         public string Password { get; set; }
+        public string ConfirmPassword { get; set; }
     }
 }
