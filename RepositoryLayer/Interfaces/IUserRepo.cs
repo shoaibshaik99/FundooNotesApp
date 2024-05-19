@@ -1,4 +1,5 @@
-﻿using ModelLayer.Models;
+﻿using CloudinaryDotNet.Actions;
+using ModelLayer.Models;
 using RepositoryLayer.Entities;
 using System;
 using System.Collections.Generic;
@@ -13,13 +14,19 @@ namespace RepositoryLayer.Interfaces
 
         public string Login(UserLoginModel userLoginModel);
 
-        public bool VerifyEmailExists(string email);
+        public bool IsRegisteredEmail(string email);
 
         public ForgotPasswordModel ForgotPassword(string email);
 
-        public ResetPasswordModel ResetPassword(ResetPasswordModel resetPasswordModel);
+        public bool ResetPassword(string email, ResetPasswordModel resetPasswordModel);
 
-        public UserEntity GetUsrByEmail(string email);
+        public UserEntity GetUserByEmail(string email);
+
+        public UserEntity GetUserById(int userId);
+
+        public bool UpdateUserProfile(UpdateUserModel updateUserModel);
+
+        public int CheckAndUpdateUser(UpdateUserModel updateUserModel, string userEmail);
 
     }
 }

@@ -12,12 +12,18 @@ namespace BusinessLayer.Interfaces
 
         public string Login(UserLoginModel userLoginModel);
 
-        public bool CheckEmailExists(string email);
+        public bool IsRegisteredEmail(string email);
 
         public ForgotPasswordModel ForgotPassword(string email);
 
-        public ResetPasswordModel ResetPassword(ResetPasswordModel resetPasswordModel);
+        public bool ResetPassword(string email, ResetPasswordModel resetPasswordModel);
 
         public UserEntity GetUsrByEmail(string email);
+
+        public UserEntity GetUserById(int userId);
+
+        public bool UpdateUserProfile(UpdateUserModel updateUserModel);
+
+        public int CheckAndUpdateUser(UpdateUserModel updateUserModel, string userEmail);
     }
 }
